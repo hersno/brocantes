@@ -1,0 +1,55 @@
+:root {
+  --fond: #f6f5f1; --surface: #ffffff; --texte: #1d1d1b; --texte-2: #5b5b57; --bord: #dcdad2;
+  --accent: #b4431f; --accent-texte: #ffffff; --succes: #1f7a45; --erreur: #b3261e;
+  color-scheme: light dark;
+}
+@media (prefers-color-scheme: dark) {
+  :root { --fond: #171715; --surface: #22221f; --texte: #eeede8; --texte-2: #a9a8a1; --bord: #3a3934; --accent: #e0714b; --accent-texte: #171715; --succes: #5ec48a; --erreur: #ff8a80; }
+}
+* { box-sizing: border-box; }
+body { margin: 0; font: 16px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; background: var(--fond); color: var(--texte); }
+main { max-width: 1100px; margin: 0 auto; padding: 16px; }
+h1 { font-size: 1.6rem; line-height: 1.2; margin: 0.5rem 0 1rem; }
+h2 { font-size: 1.15rem; margin: 1rem 0 0.5rem; }
+a { color: var(--accent); }
+input, select, textarea, button { font: inherit; }
+input, select, textarea { width: 100%; padding: 10px 12px; border: 1px solid var(--bord); border-radius: 8px; background: var(--surface); color: var(--texte); }
+label { display: grid; gap: 4px; font-size: 14px; font-weight: 500; }
+label.case { display: flex; align-items: flex-start; gap: 8px; font-weight: 400; }
+label.case input { width: auto; margin-top: 4px; }
+button, .bouton { display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 10px 16px; border-radius: 8px; border: 1px solid var(--bord); background: var(--surface); color: var(--texte); cursor: pointer; text-decoration: none; }
+button:disabled { opacity: 0.5; cursor: not-allowed; }
+.principal { background: var(--accent); border-color: var(--accent); color: var(--accent-texte); font-weight: 600; }
+button.lien { border: none; background: none; color: var(--accent); padding: 0; }
+.barre-haut { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; padding: 12px 16px; background: var(--surface); border-bottom: 1px solid var(--bord); }
+.barre-haut nav { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
+.barre-haut a { text-decoration: none; color: var(--texte); }
+.barre-haut a.actif { color: var(--accent); font-weight: 600; }
+.logo { font-weight: 700; font-size: 1.1rem; }
+.carte { background: var(--surface); border: 1px solid var(--bord); border-radius: 12px; padding: 16px; }
+.etroite { max-width: 480px; margin: 24px auto; }
+form { display: grid; gap: 12px; }
+.ligne { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; }
+.filtres { grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); align-items: end; }
+.erreur { color: var(--erreur); }
+.succes { color: var(--succes); }
+.note, .resume { font-size: 14px; color: var(--texte-2); }
+.resultats { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
+.resultats a { color: inherit; text-decoration: none; }
+.resultats h2 { margin-top: 0; }
+.resultats p { margin: 4px 0; }
+.badge { font-weight: 600; color: var(--succes); }
+.grille { display: grid; grid-template-columns: 1fr; gap: 16px; }
+@media (min-width: 900px) { .grille { grid-template-columns: 2fr 1fr; align-items: start; } .panier { position: sticky; top: 16px; } }
+.panier .total { font-size: 1.1rem; }
+.ligne-panier { display: flex; justify-content: space-between; gap: 8px; margin: 4px 0; }
+.tableau { width: 100%; border-collapse: collapse; background: var(--surface); border-radius: 12px; overflow: hidden; }
+.tableau th, .tableau td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--bord); }
+.titre-actions { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+.etapes { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+.etapes .active { border-color: var(--accent); color: var(--accent); font-weight: 600; }
+.apercu { display: block; max-width: 100%; margin-top: 12px; border-radius: 8px; }
+.blocage { display: flex; flex-wrap: wrap; gap: 8px; }
+.statut { font-size: 13px; padding: 2px 8px; border-radius: 99px; border: 1px solid var(--bord); }
+.statut.PAYEE, .statut.PUBLIEE { color: var(--succes); border-color: currentColor; }
+@media (max-width: 640px) { .tableau { font-size: 14px; } .tableau th, .tableau td { padding: 8px; } }

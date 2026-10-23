@@ -1,0 +1,57 @@
+# Blueprint Render : https://render.com/docs/yaml-spec
+# Les déploiements sont déclenchés par GitHub Actions (deploy hooks) une fois la CI verte.
+services:
+  - type: web
+    name: brocantes-api
+    runtime: node
+    plan: free
+    region: frankfurt
+    rootDir: api
+    buildCommand: npm install --include=dev --no-audit --no-fund && npm run build
+    startCommand: npm start
+    healthCheckPath: /api/health
+    autoDeployTrigger: 'off'
+    envVars:
+      - key: NODE_VERSION
+        value: '22'
+      - key: DATABASE_URL # chaîne de connexion Neon
+        sync: false
+      - key: DATABASE_SSL
+        value: 'true'
+      - key: JWT_SECRET
+        generateValue: true
+      - key: FRONT_URL # ex. https://brocantes-web.onrender.com
+        sync: false
+      - key: ADMIN_EMAIL
+        sync: false
+      - key: ADMIN_PASSWORD
+        sync: false
+      - key: STRIPE_SECRET_KEY # clé sk_test_…
+        sync: false
+      - key: STRIPE_WEBHOOK_SECRET # whsec_…
+        sync: false
+      - key: SMTP_HOST
+        value: smtp-relay.brevo.com
+      - key: SMTP_PORT
+        value: '587'
+      - key: SMTP_USER
+        sync: false
+      - key: SMTP_PASS
+        sync: false
+      - key: MAIL_FROM
+        sync: false
+
+  - type: web
+    name: brocantes-web
+    runtime: static
+    rootDir: web
+    buildCommand: npm install --include=dev --no-audit --no-fund && npm run build
+    staticPublishPath: dist/web/browser
+    autoDeployTrigger: 'off'
+    envVars:
+      - key: NODE_VERSION
+        value: '22'
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
