@@ -20,6 +20,13 @@ import { AuthGuard, Roles } from '../auth/auth';
 import { Brocante, Role } from '../entities';
 import { BrocanteDto, BrocantesService, PlanDto, RechercheDto } from './brocantes.service';
 
+/** Fichier reçu par Multer (champs utilisés uniquement). */
+interface FichierPhoto {
+  buffer: Buffer;
+  mimetype: string;
+  size: number;
+}
+
 class BlocageDto {
   @IsBoolean() bloque: boolean;
 }
@@ -85,7 +92,7 @@ export class BrocantesAdminController {
 
   @Post(':id/photo')
   @UseInterceptors(FileInterceptor('photo', { limits: { fileSize: 10 * 1024 * 1024 } }))
-  photo(@Param('id', ParseUUIDPipe) id: string, @UploadedFile() fichier: Express.Multer.File) {
+  photo(@Param('id', ParseUUIDPipe) id: string, @UploadedFile() fichier?: FichierPhoto) {
     return this.service.enregistrerPhoto(id, fichier);
   }
 
