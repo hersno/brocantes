@@ -75,15 +75,31 @@ jobs:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     environment: test
+    env:
+      HOOK_API: ${{ secrets.RENDER_DEPLOY_HOOK_API }}
+      HOOK_WEB: ${{ secrets.RENDER_DEPLOY_HOOK_WEB }}
+      API_URL: ${{ vars.API_URL }}
     steps:
+      - name: Vérifier la configuration Render
+        id: config
+        run: |
+          if [ -z "$HOOK_API" ] || [ -z "$HOOK_WEB" ]; then
+            echo "::notice::Déploiement ignoré : ajoutez les secrets RENDER_DEPLOY_HOOK_API et RENDER_DEPLOY_HOOK_WEB (voir README, étape 8)."
+            echo "pret=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "pret=true" >> "$GITHUB_OUTPUT"
+          fi
       - name: Déployer l'API
-        run: curl -fsS -X POST "${{ secrets.RENDER_DEPLOY_HOOK_API }}"
+        if: steps.config.outputs.pret == 'true'
+        run: curl -fsS -X POST "$HOOK_API"
       - name: Déployer le front
-        run: curl -fsS -X POST "${{ secrets.RENDER_DEPLOY_HOOK_WEB }}"
+        if: steps.config.outputs.pret == 'true'
+        run: curl -fsS -X POST "$HOOK_WEB"
       - name: Attendre que l'API réponde
+        if: steps.config.outputs.pret == 'true' && env.API_URL != ''
         run: |
           for i in $(seq 1 30); do
-            if curl -fsS "${{ vars.API_URL }}/health"; then exit 0; fi
+            if curl -fsS "$API_URL/health"; then exit 0; fi
             sleep 10
           done
           echo "L'API ne répond pas après 5 minutes" && exit 1
